@@ -1,13 +1,13 @@
 <?php
 
-  $con=mysqli_connect("localhost","root","","anons");
+   $con=mysqli_connect("localhost","root","","anons");
 
   // Check connection
   if (mysqli_connect_errno())
   {
    echo "Failed to connect to MySQL: " . mysqli_connect_error();
   }
-
+	$ip = md5($_SERVER['REMOTE_ADDR']);
 	$lat = $con->real_escape_string($_POST["lat"]);
     $lon = $con->real_escape_string($_POST["lon"]);
 	$name = $con->real_escape_string($_POST["name"]);
@@ -25,19 +25,40 @@
 	
 	if (is_numeric($lat) && is_numeric($lon)){
 	
-		$sql = "insert into anonlist (lat, lon, name,telegram, text) values ('$lat', '$lon','$name','$telegram','$text')";
-		
-		if($con->query($sql))
+		$res = $con->query("SELECT name FROM anonlist WHERE ip = '$ip'");
+		$count = $res->num_rows;
+		echo $count;
+		if ($count==0)
 		{
-			echo "Маркер добавлен";
-			echo '<script type="text/javascript">';
-			echo 'window.location=document.referrer;';
-			echo '</script>';
+			$sql = "insert into anonlist (lat, lon, name,telegram, text, ip) values ('$lat', '$lon','$name','$telegram','$text','$ip')";
+			if($con->query($sql))
+			{
+				echo "Маркер добавлен";
+				echo '<script type="text/javascript">';
+				echo 'window.location=document.referrer;';
+				echo '</script>';
+			}
+			else
+			{
+				echo "Ошибка: " . $con->error;
+			}
 		}
 		else
 		{
-			echo "Ошибка: " . $con->error;
+			$sql = "UPDATE anonlist SET lat='$lat', lon='$lon', name = '$name', telegram = '$telegram', text = '$text' WHERE ip = '$ip';";
+			if($con->query($sql))
+				{
+					echo "Маркер перенесен";
+					echo '<script type="text/javascript">';
+					echo 'window.location=document.referrer;';
+					echo '</script>';
+				}
+				else
+				{
+					echo "Ошибка: " . $con->error;
+				}
 		}
+		
 	}
 	else
 	{
