@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>API карт 2ГИС</title>
+        <title>Anonmap</title>
 		
         <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full"></script>
 
@@ -30,9 +30,14 @@
 				map.on('move', function(e) {
                     //document.getElementById('text').innerText = e;
                 });
-				
+				myIcon = DG.icon({
+                    iconUrl: 'paket.png',
+                    iconSize: [48, 48]
+                });
 				function AddMarker(coords, clickName, clickTelegram, clickText) {
-								DG.marker(coords).bindPopup(clickName).on('click', function() {
+								DG.marker(coords,{
+                    icon: myIcon
+                }).bindPopup(clickName).on('click', function() {
 									document.getElementById('form').style.visibility = "hidden";
 									document.getElementById('form').style.width='1px';
 									
@@ -47,7 +52,6 @@
 				}
 
 				<?php
-				print "AddMarker([54.98, 82.89],'Anon 3', '@ololo', 'testtext');";
 				include 'database.php';
 				 ?>
 				
@@ -66,7 +70,7 @@
 			<span id="text" > </span>
 		</div>
 		
-		<div id='form' style="display:table-cell; visibility: hidden float:right;">
+		<div id='form' style="display:table-cell; visibility: hidden; float:right;">
 			<p>Добавить свою метку:</p>
 			<form name="add_form" action="create.php" method="post">
 			<input type="text" id="lat" name="lat" value="lat" style="display:none"; size="0"; />
