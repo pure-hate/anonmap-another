@@ -1,18 +1,14 @@
 <?php
 
-   $con=mysqli_connect("localhost","root","","anons");
+include 'connection.php';
 
-  // Check connection
-  if (mysqli_connect_errno())
-  {
-   echo "Failed to connect to MySQL: " . mysqli_connect_error();
-  }
 	$ip = md5($_SERVER['REMOTE_ADDR']);
 	$lat = $con->real_escape_string($_POST["lat"]);
     $lon = $con->real_escape_string($_POST["lon"]);
 	$name = $con->real_escape_string($_POST["name"]);
     $telegram = $con->real_escape_string($_POST["telegram"]);
     $text = $con->real_escape_string($_POST["text"]);
+	$icon = $con->real_escape_string($_POST["icon"]);
 	
 	$name = substr($name, 0, 100);
 	$telegram = substr($telegram, 0, 50);
@@ -30,7 +26,7 @@
 		echo $count;
 		if ($count==0)
 		{
-			$sql = "insert into anonlist (lat, lon, name,telegram, text, ip) values ('$lat', '$lon','$name','$telegram','$text','$ip')";
+			$sql = "insert into anonlist (lat, lon, name,telegram, text, ip, icon) values ('$lat', '$lon','$name','$telegram','$text','$ip','$icon')";
 			if($con->query($sql))
 			{
 				echo "Маркер добавлен";
@@ -45,7 +41,7 @@
 		}
 		else
 		{
-			$sql = "UPDATE anonlist SET lat='$lat', lon='$lon', name = '$name', telegram = '$telegram', text = '$text' WHERE ip = '$ip';";
+			$sql = "UPDATE anonlist SET lat='$lat', lon='$lon', name = '$name', telegram = '$telegram', text = '$text', icon = '$icon' WHERE ip = '$ip';";
 			if($con->query($sql))
 				{
 					echo "Маркер перенесен";

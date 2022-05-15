@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Anonmap</title>
-		
+		<link href="style.css" rel="stylesheet" type="text/css">
         <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full"></script>
 
     </head>
@@ -11,8 +11,8 @@
             var map;
             DG.then(function () {
                 map = DG.map('map', {
-                    center: [54.98, 82.89],
-                    zoom: 13
+                    center: [55.75374828253524, 37.61992871761323],
+                    zoom: 10
                 });
 				
 				map.on('click', function(e) {
@@ -30,13 +30,53 @@
 				map.on('move', function(e) {
                     //document.getElementById('text').innerText = e;
                 });
-				myIcon = DG.icon({
+				myIcon1 = DG.icon({
                     iconUrl: 'paket.png',
                     iconSize: [48, 48]
                 });
-				function AddMarker(coords, clickName, clickTelegram, clickText) {
+				myIcon2 = DG.icon({
+                    iconUrl: '2.png',
+                    iconSize: [48, 48]
+                });
+				myIcon3 = DG.icon({
+                    iconUrl: '3.png',
+                    iconSize: [48, 48]
+                });
+				myIcon4 = DG.icon({
+                    iconUrl: '4.png',
+                    iconSize: [48, 48]
+                });
+				myIcon5 = DG.icon({
+                    iconUrl: '5.png',
+                    iconSize: [48, 48]
+                });
+				myIcon6 = DG.icon({
+                    iconUrl: '6.png',
+                    iconSize: [48, 48]
+                });
+				myIcon7 = DG.icon({
+                    iconUrl: '7.png',
+                    iconSize: [48, 48]
+                });
+				myIcon8 = DG.icon({
+                    iconUrl: '8.png',
+                    iconSize: [48, 48]
+                });
+				icons = new Map([
+				['1', myIcon1],
+				['2', myIcon2],
+				['3', myIcon3],
+				['4', myIcon4],
+				['5', myIcon5],
+				['6', myIcon6],
+				['7', myIcon7],
+				['8', myIcon8],
+					]);
+				
+				function AddMarker(coords, clickName, clickTelegram, clickText, icon_num) {
+					let icon_temp = icons.get(icon_num);
 								DG.marker(coords,{
-                    icon: myIcon
+                    icon: icon_temp
                 }).bindPopup(clickName).on('click', function() {
 									document.getElementById('form').style.visibility = "hidden";
 									document.getElementById('form').style.width='1px';
@@ -82,6 +122,40 @@
 			<input type="text" name="telegram" />
 			Текст
 			<input type="text" name="text" />
+			<label>
+			<br>
+			<input type="radio" name="icon" value="1" checked>
+			<img src="paket.png">
+			</label>
+			<label>
+			<input type="radio" name="icon" value="2">
+			<img src="2.png">
+			</label>
+			<label>
+			<input type="radio" name="icon" value="3">
+			<img src="3.png">
+			</label>
+			<label>
+			<input type="radio" name="icon" value="4">
+			<img src="4.png">
+			</label>
+			<label>
+			<input type="radio" name="icon" value="5">
+			<img src="5.png">
+			</label>
+			<label>
+			<input type="radio" name="icon" value="6">
+			<img src="6.png">
+			</label>
+			<label>
+			<input type="radio" name="icon" value="7">
+			<img src="7.png">
+			</label>
+			<label>
+			<input type="radio" name="icon" value="8">
+			<img src="8.png">
+			</label>
+
 			<input type="submit" value="Добавить">
 		</form>
 		</div>

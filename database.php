@@ -1,21 +1,15 @@
 
 <?php
 
-  $con=mysqli_connect("localhost","root","","anons");
+  include 'connection.php';
 
-  // Check connection
-  if (mysqli_connect_errno())
-  {
-   echo "Failed to connect to MySQL: " . mysqli_connect_error();
-  }
-
-  $query = "select lat, lon, name, telegram, text  from anonlist";
+  $query = "select lat, lon, name, telegram, text, icon  from anonlist";
 
   $result = mysqli_query($con,$query);
 
   $rows = array();
    while($r = mysqli_fetch_assoc($result)) {
-	 print "AddMarker([" .$r['lat']. ", " .$r['lon']. "],'" .$r['name']. "', '" .$r['telegram']. "', '" .$r['text']. "');";
+	 print "AddMarker([" .$r['lat']. ", " .$r['lon']. "],'" .$r['name']. "', '" .$r['telegram']. "', '" .$r['text']. "', '".$r['icon']. "');";
      $rows[] = $r;
   }
   //echo "var markers ='"  . json_encode($rows) . "'";
