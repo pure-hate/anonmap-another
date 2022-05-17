@@ -35,37 +35,10 @@
 				map.on('moveend', function(e) {
 					
 					
-					DeleteAllMarkers();
 
 					
-					var bound=map.getBounds();
-					
-					x1b = bound.getNorthWest().lat;
-					y1b = bound.getNorthWest().lng;
-					x2b = bound.getSouthEast().lat;
-					y2b = bound.getSouthEast().lng;
-					
-                         $.ajax({
-					type:'post',
-                    url: 'update.php',
-					data:{x1:x1b, x2:x2b, y1:y1b, y2:y2b},
-       
-					response:'text',
-                    success: function(r){
-                        try {
-							
-                            str= JSON.parse(r);
-							
-							for(item in str){
-								AddMarker([str[item][0],str[item][1]],str[item][2],str[item][3],str[item][4],str[item][5]);
-							}
-                            
-                        } catch (e) {
-                            alert("Ошибка:" + e);
-                            console.log(e);
-                        }
-                    }
-                });
+					RefreshMarkers();
+				
                 });
 				myIcon1 = DG.icon({
                     iconUrl: 'paket.png',
@@ -109,6 +82,40 @@
 				['7', myIcon7],
 				['8', myIcon8],
 					]);
+					
+				function RefreshMarkers()
+				{
+					DeleteAllMarkers();
+
+					
+					var bound=map.getBounds();
+					
+					x1b = bound.getNorthWest().lat;
+					y1b = bound.getNorthWest().lng;
+					x2b = bound.getSouthEast().lat;
+					y2b = bound.getSouthEast().lng;
+				 $.ajax({
+					type:'post',
+                    url: 'update.php',
+					data:{x1:x1b, x2:x2b, y1:y1b, y2:y2b},
+       
+					response:'text',
+                    success: function(r){
+                        try {
+							
+                            str= JSON.parse(r);
+							
+							for(item in str){
+								AddMarker([str[item][0],str[item][1]],str[item][2],str[item][3],str[item][4],str[item][5]);
+							}
+                            
+                        } catch (e) {
+                            alert("Ошибка:" + e);
+                            console.log(e);
+                        }
+                    }
+                });
+				}
 				
 				function DeleteAllMarkers()
 				{
@@ -138,7 +145,7 @@
                     }).addTo(map);
 					
 				}
-				DeleteAllMarkers();
+				RefreshMarkers();
 				
 
               
