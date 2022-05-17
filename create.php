@@ -19,7 +19,7 @@ include 'connection.php';
 		$telegram= "@".$telegram;
 	}
 	
-	if (is_numeric($lat) && is_numeric($lon)){
+	if (is_numeric($lat) && is_numeric($lon) && is_numeric($icon)){
 	
 		$res = $con->query("SELECT name FROM anonlist WHERE ip = '$ip'");
 		$count = $res->num_rows;
@@ -58,7 +58,7 @@ include 'connection.php';
 	}
 	else
 	{
-		echo "Ошибка: координаты попердолены";
+		echo "Ошибка: координаты или метка попердолены";
 	}
     $con->close();
 ?>

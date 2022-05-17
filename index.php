@@ -4,17 +4,22 @@
         <title>Anonmap</title>
 		<link href="style.css" rel="stylesheet" type="text/css">
         <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full"></script>
+		<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.js"></script> 
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+
 
     </head>
     <body> 
 	<script type="text/javascript">
             var map;
+			
             DG.then(function () {
                 map = DG.map('map', {
                     center: [55.75374828253524, 37.61992871761323],
-                    zoom: 10
+                    zoom: 9
                 });
 				
+
 				map.on('click', function(e) {
                     document.getElementById('form').style.visibility = "visible";
 					document.getElementById('form').style.width='100%';
@@ -27,8 +32,40 @@
 					
                 });
 				
-				map.on('move', function(e) {
-                    //document.getElementById('text').innerText = e;
+				map.on('moveend', function(e) {
+					
+					
+					DeleteAllMarkers();
+
+					
+					var bound=map.getBounds();
+					
+					x1b = bound.getNorthWest().lat;
+					y1b = bound.getNorthWest().lng;
+					x2b = bound.getSouthEast().lat;
+					y2b = bound.getSouthEast().lng;
+					
+                         $.ajax({
+					type:'post',
+                    url: 'update.php',
+					data:{x1:x1b, x2:x2b, y1:y1b, y2:y2b},
+       
+					response:'text',
+                    success: function(r){
+                        try {
+							
+                            str= JSON.parse(r);
+							
+							for(item in str){
+								AddMarker([str[item][0],str[item][1]],str[item][2],str[item][3],str[item][4],str[item][5]);
+							}
+                            
+                        } catch (e) {
+                            alert("Ошибка:" + e);
+                            console.log(e);
+                        }
+                    }
+                });
                 });
 				myIcon1 = DG.icon({
                     iconUrl: 'paket.png',
@@ -73,6 +110,16 @@
 				['8', myIcon8],
 					]);
 				
+				function DeleteAllMarkers()
+				{
+					for(item in map._layers.valueOf()){
+
+					if (map._layers[item].hasOwnProperty('_latlng'))
+						{map._layers[item].remove();}
+					}
+				}
+				
+				
 				function AddMarker(coords, clickName, clickTelegram, clickText, icon_num) {
 					let icon_temp = icons.get(icon_num);
 								DG.marker(coords,{
@@ -89,11 +136,9 @@
 						  document.getElementById('telegram').href = "https://telegram.im/"+clickTelegram;
 						  document.getElementById('text').innerText = clickText;
                     }).addTo(map);
+					
 				}
-
-				<?php
-				include 'database.php';
-				 ?>
+				DeleteAllMarkers();
 				
 
               
