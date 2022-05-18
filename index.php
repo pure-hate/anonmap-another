@@ -185,7 +185,7 @@
             });
         </script>
 		
-    <div id="map" style="width:100vw; height:100vh";></div>
+    <div id="map" style="width:99vw; height:97vh; overflow-x: hidden;";></div>
 		
     </body>
 </html>
