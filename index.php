@@ -12,6 +12,8 @@
     <body> 
 	<script type="text/javascript">
             var map;
+			var tempMarker;
+			var tempPopup;
 			
             DG.then(function () {
                 map = DG.map('map', {
@@ -21,14 +23,54 @@
 				
 
 				map.on('click', function(e) {
-                    document.getElementById('form').style.visibility = "visible";
-					document.getElementById('form').style.width='100%';
+				tempPopup = DG.popup({autoPan:false})
+					.setLatLng([e.latlng.lat, e.latlng.lng])
+					.setContent(`<p>Добавить свою метку:</p>
+			<form name="add_form" action="create.php" method="post">
+			<input type="text" id="lat" name="lat" value=`+e.latlng.lat+` style="display:none"; size="0"; />
+			<input type="text" id="lon" name="lon" value=`+e.latlng.lng+` style="display:none"; size="0"; />
+			<br>
+			Имя:
+			<input type="text" name="name" /><br>
+			Телеграмм
+			<input type="text" name="telegram" /><br>
+			Текст
+			<input type="text" name="text" />
+			<br>
+			
+			<label>
+			<input type="radio" name="icon" value="1" checked>
+			<img src="paket.png" width="32" height="32"></label>
+			<label>
+			<input type="radio" name="icon" value="2">
+			<img src="2.png" width="32" height="32"></label>
+			<label>
+			<input type="radio" name="icon" value="3">
+			<img src="3.png" width="32" height="32"></label>
+			<label>
+			<input type="radio" name="icon" value="4">
+			<img src="4.png" width="32" height="32"></label>
+			<br>
+			<label>
+			<input type="radio" name="icon" value="5">
+			<img src="5.png" width="32" height="32"></label>
+			<label>
+			<input type="radio" name="icon" value="6">
+			<img src="6.png" width="32" height="32"></label>
+			<label>
+			<input type="radio" name="icon" value="7">
+			<img src="7.png" width="32" height="32"></label>
+			<label>
+			<input type="radio" name="icon" value="8">
+			<img src="8.png" width="32" height="32"></label>
+			<br>
+			<input type="submit" value="Добавить">
+		</form>`
+		).openOn(map);
+		
 					
-					document.getElementById('info').style.visibility = "hidden";
-					document.getElementById('info').style.width='1px';
 					
-					document.getElementById('lat').value = e.latlng.lat;
-					document.getElementById('lon').value = e.latlng.lng;
+					
 					
                 });
 				
@@ -128,20 +170,11 @@
 				
 				
 				function AddMarker(coords, clickName, clickTelegram, clickText, icon_num) {
+					
 					let icon_temp = icons.get(icon_num);
 								DG.marker(coords,{
                     icon: icon_temp
-                }).bindPopup(clickName).on('click', function() {
-									document.getElementById('form').style.visibility = "hidden";
-									document.getElementById('form').style.width='1px';
-									
-									document.getElementById('info').style.visibility = "visible";
-									document.getElementById('info').style.width='100%';
-									
-                          document.getElementById('named').innerText = clickName;
-						  document.getElementById('telegram').innerText = clickTelegram;
-						  document.getElementById('telegram').href = "https://telegram.im/"+clickTelegram;
-						  document.getElementById('text').innerText = clickText;
+                }).bindPopup(clickName + ' <br><a href="https://telegram.im/' +clickTelegram+ '" target="_blank">'+clickTelegram+'</a><br>' +clickText).on('click', function() {		
                     }).addTo(map);
 					
 				}
@@ -152,67 +185,7 @@
             });
         </script>
 		
-    <div id="map" style="width:100%; height:500px;"></div>
-	
-
-	
-		<div id='info' style="display:table-cell;width:50%; word-wrap: break-word;">
-			<span id="named"> </span><br>
-			<a id="telegram" href="" target="_blank"></a><br>
-			<span id="text" > </span>
-		</div>
-		
-		<div id='form' style="display:table-cell; visibility: hidden; float:right;">
-			<p>Добавить свою метку:</p>
-			<form name="add_form" action="create.php" method="post">
-			<input type="text" id="lat" name="lat" value="lat" style="display:none"; size="0"; />
-			<input type="text" id="lon" name="lon" value="lon" style="display:none"; size="0"; />
-			<br>
-			Имя:
-			<input type="text" name="name" />
-			Телеграмм
-			<input type="text" name="telegram" />
-			Текст
-			<input type="text" name="text" />
-			<label>
-			<br>
-			<input type="radio" name="icon" value="1" checked>
-			<img src="paket.png">
-			</label>
-			<label>
-			<input type="radio" name="icon" value="2">
-			<img src="2.png">
-			</label>
-			<label>
-			<input type="radio" name="icon" value="3">
-			<img src="3.png">
-			</label>
-			<label>
-			<input type="radio" name="icon" value="4">
-			<img src="4.png">
-			</label>
-			<label>
-			<input type="radio" name="icon" value="5">
-			<img src="5.png">
-			</label>
-			<label>
-			<input type="radio" name="icon" value="6">
-			<img src="6.png">
-			</label>
-			<label>
-			<input type="radio" name="icon" value="7">
-			<img src="7.png">
-			</label>
-			<label>
-			<input type="radio" name="icon" value="8">
-			<img src="8.png">
-			</label>
-
-			<input type="submit" value="Добавить">
-		</form>
-		</div>
-	
-
+    <div id="map" style="width:100vw; height:100vh";></div>
 		
     </body>
 </html>
